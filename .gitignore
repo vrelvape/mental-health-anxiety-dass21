@@ -1,0 +1,32 @@
+#Python bytecode & cache
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+#Virtual environments 
+venv/
+.venv/
+
+#Jupyter / notebooks
+.ipynb_checkpoints/
+
+#Pytest & coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+#LaTeX build artefacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+
+#OS-specific crap
+.DS_Store
+
+# Editor / VS Code
+.vscode/
