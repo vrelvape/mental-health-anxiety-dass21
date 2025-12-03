@@ -1,0 +1,20 @@
+# Core numerical & data handling
+numpy
+pandas
+scipy
+
+# Plotting & visualisation
+matplotlib
+seaborn
+
+# Geo analysis & country codes
+geopandas
+pycountry
+
+# Modelling & statistics
+scikit-learn
+statsmodels
+
+# Testing
+pytest
+pytest-cov
