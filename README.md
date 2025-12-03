@@ -200,7 +200,7 @@ Tables are saved under:
 
 All outputs are generated programmatically and stored in `results/figures/` and `results/tables/`.
 
-![Choropleth Map of Anxiety by Country](results/figures/worldmap_anxiety_by_country.png)
+![Choropleth Map of Anxiety by Country](docs/figures/worldmap_anxiety_by_country.png)
 
 
 This map shows the average anxiety levels across countries.
