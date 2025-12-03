@@ -1,4 +1,4 @@
-# Mental Health & Anxiety – DASS-21 Analysis & Modelling
+voici donc ce que j'ai mtn analyse ce readme comme les autres doc:# Mental Health & Anxiety – DASS-21 Analysis & Modelling
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
@@ -43,11 +43,47 @@ The goal is to understand how anxiety relates to demographics, personality trait
 ### Installation
 
 ```bash
-git clone https://github.com/vrelvape/MENTAL-HEALTH_ANXIETY.git
-cd MENTAL-HEALTH_ANXIETY
+git clone https://github.com/vrelvape/mental-health-anxiety-dass21.git
+cd mental-health-anxiety-dass21
 pip install -r requirements.txt
 ```
 The environment can be recreated using pip install -r requirements.txt inside a virtual environment.
+
+## Input data files
+
+### 1. Main survey CSV
+
+The main survey dataset used in this project is stored as:
+
+- `data/mental_health_survey.csv`
+
+If you are working from a fresh clone and this file is missing (for example, if the raw data was removed for privacy or size reasons), you can download it again from Open Psychometrics:
+
+> Open Psychometrics – DASS-21 dataset  
+> https://openpsychometrics.org/_rawdata/
+
+The original file from Open Psychometrics is typically named `data.csv`. 
+
+If needed, please rename it to `mental_health_survey.csv` and place it in the `data/` directory so that the pipeline can find it.
+
+
+### 2. World boundaries GeoJSON (for the map figure)
+
+One figure in this project, the choropleth “Mean Anxiety Score by Country” requires a GeoJSON file containing country boundaries.
+
+To enable this figure, download a world countries GeoJSON file and save it as:
+
+- `data/geo/world_countries.geojson`
+
+For example, from the project root you can create the folder and download a compatible file with:
+
+```bash
+mkdir -p data/geo
+
+curl -L "https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson" \
+  -o data/geo/world_countries.geojson
+```
+
 ## How to Run the Full Pipeline
 
 From the project root:
