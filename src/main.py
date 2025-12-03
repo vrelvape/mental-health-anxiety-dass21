@@ -75,6 +75,13 @@ def run_tipi_boxplots(analysis_std_df: pd.DataFrame) -> None:
     generate_tipi_boxplots(analysis_std_df)
     logger.info("TIPI boxplots generated.")
 
+def run_tipi_dass_heatmap(analysis_std_df) -> None:
+    """Generate the TIPI–DASS correlation heatmap."""
+    from src.viz.tipi_dass_heatmap import plot_tipi_dass_heatmap
+
+    logging.info("Generating TIPI–DASS correlation heatmap...")
+    plot_tipi_dass_heatmap(analysis_std_df)
+    logging.info("TIPI–DASS heatmap generated.")
 
 def run_geo_anxiety_outputs(analysis_std_df: pd.DataFrame) -> None:
     """
@@ -212,6 +219,7 @@ def main() -> None:
     run_anxiety_distribution(analysis_std_df)
     run_demographic_boxplots(analysis_std_df)
     run_tipi_boxplots(analysis_std_df)
+    run_tipi_dass_heatmap(analysis_std_df)
     run_geo_anxiety_outputs(analysis_std_df)
     run_nonresponse_plot(analysis_df)
 
