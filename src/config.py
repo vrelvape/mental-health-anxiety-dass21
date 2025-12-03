@@ -20,6 +20,9 @@ RESULTS_DIR = PROJECT_ROOT / "results"
 FIGURES_DIR = RESULTS_DIR / "figures"
 TABLES_DIR = RESULTS_DIR / "tables"
 
+# Geographic data directory
+GEO_DATA_DIR = DATA_DIR / "geo"
+WORLD_MAP_PATH = GEO_DATA_DIR / "world_countries.geojson"
 
 def ensure_directories_exist() -> None:
     """
