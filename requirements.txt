@@ -10,6 +10,7 @@ seaborn
 # Geo analysis & country codes
 geopandas
 pycountry
+pycountry-convert
 
 # Modelling & statistics
 scikit-learn
