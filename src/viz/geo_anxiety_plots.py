@@ -1,26 +1,13 @@
-"""
-Geographic summaries and visualisations for DASS-Anxiety.
-
-This module:
-- computes mean anxiety by country and continent,
-- builds a choropleth world map,
-- saves tables for continent means and top-10 countries.
-"""
-
-from __future__ import annotations
-
-from typing import Optional
-
 import geopandas as gpd
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
 import pycountry
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-from src.config import FIGURES_DIR, TABLES_DIR, ensure_directories_exist
+from src.config import FIGURES_DIR, TABLES_DIR, WORLD_MAP_PATH, ensure_directories_exist
 
 
-def get_iso_alpha_3(name: str) -> Optional[str]:
+def get_iso_alpha_3(name: str) -> str | None:
     """
     Return ISO alpha-3 country code for a given country name.
 
@@ -67,33 +54,51 @@ def compute_mean_anxiety_by_country(analysis_df: pd.DataFrame) -> pd.DataFrame:
 
 def plot_world_anxiety_map(
     mean_anxiety_by_country: pd.DataFrame,
-    world_gdf: Optional[gpd.GeoDataFrame] = None,
+    world_gdf: gpd.GeoDataFrame | None = None,
 ) -> None:
     """
-    Plot a world choropleth of mean anxiety by country.
+    Plot a world choropleth of mean anxiety by country, using a local GeoJSON.
 
-    Parameters
-    ----------
-    mean_anxiety_by_country : pd.DataFrame
-        DataFrame with 'iso_alpha_3' and 'mean_anxiety' columns.
-    world_gdf : GeoDataFrame, optional
-        Optional pre-loaded world GeoDataFrame. If None, the built-in
-        'naturalearth_lowres' dataset from GeoPandas is used.
+    The base map is loaded from WORLD_MAP_PATH (committed in the repository),
+    so no internet connection is required at runtime.
     """
     ensure_directories_exist()
 
-    # Use local, built-in dataset to avoid any network dependency
     if world_gdf is None:
-        world_gdf = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+        try:
+            world_gdf = gpd.read_file(WORLD_MAP_PATH)
+        except Exception as exc:
+            print(f"Could not load local world map (skipping choropleth): {exc}")
+            return
 
     world_gdf = world_gdf.copy()
-    # Some world datasets may have "id" instead of "iso_a3"; keep the old logic
-    world_gdf["iso_a3"] = world_gdf.get("id", world_gdf.get("iso_a3"))
+
+    # Try several common ISO-3 column names, including this file's:
+    possible_iso_cols = [
+        "iso_a3",
+        "ISO_A3",
+        "iso3",
+        "ISO3",
+        "ISO3166-1-Alpha-3",  # <- celui de ton fichier
+        "id",
+    ]
+    code_col = None
+    for col in possible_iso_cols:
+        if col in world_gdf.columns:
+            code_col = col
+            break
+
+    if code_col is None:
+        print(
+            "World GeoDataFrame has no suitable ISO-3 column "
+            f"(available columns: {list(world_gdf.columns)}); skipping map."
+        )
+        return
 
     merged = world_gdf.merge(
         mean_anxiety_by_country,
         how="left",
-        left_on="iso_a3",
+        left_on=code_col,
         right_on="iso_alpha_3",
     )
 
@@ -117,7 +122,6 @@ def plot_world_anxiety_map(
     plt.close()
 
     print(f"Saved world map to: {out_path}")
-
 
 def compute_continent_stats(analysis_df: pd.DataFrame) -> pd.DataFrame:
     """
@@ -286,5 +290,4 @@ if __name__ == "__main__":
     cleaned = full_cleaning_pipeline(raw)
     analysis_std = cleaned.analysis_standardized_df
 
-    # When run directly, we *do* want the CSV tables.
     generate_geo_anxiety_outputs(analysis_std, save_csv=True)
