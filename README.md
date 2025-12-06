@@ -1,4 +1,3 @@
-voici donc ce que j'ai mtn analyse ce readme comme les autres doc:# Mental Health & Anxiety – DASS-21 Analysis & Modelling
 
 ![Python](https://img.shields.io/badge/Python-3.10+-blue)
 ![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
