@@ -1,22 +1,22 @@
-#Python bytecode & cache
+# Python bytecode & cache
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 
-#Virtual environments 
+# Virtual environments 
 venv/
 .venv/
 
-#Jupyter / notebooks
+# Jupyter / notebooks
 .ipynb_checkpoints/
 
-#Pytest & coverage
+# Pytest & coverage
 .pytest_cache/
 .coverage
 htmlcov/
 
-#LaTeX build artefacts
+# LaTeX build artefacts (à ne PAS versionner)
 *.aux
 *.log
 *.out
@@ -24,8 +24,27 @@ htmlcov/
 *.synctex.gz
 *.fls
 *.fdb_latexmk
+*.bbl
+*.bcf
+*.blg
+*.run.xml
+*.lof
+*.lot
+*.nav
+*.snm
+*.vrb
+*.idx
+*.ilg
+*.ind
+*.acn
+*.acr
+*.alg
+*.glg
+*.glo
+*.gls
+*.ist
 
-#OS-specific crap
+# OS-specific crap
 .DS_Store
 
 # Editor / VS Code

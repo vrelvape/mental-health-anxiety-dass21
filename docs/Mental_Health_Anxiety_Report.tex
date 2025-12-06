@@ -13,9 +13,11 @@
 \usepackage{hyperref}
 \usepackage[margin=1in]{geometry}
 \usepackage{fancyhdr}
+\setlength{\headheight}{14pt}
 \usepackage{float}
 \usepackage{caption}
 \usepackage{subcaption}
+\usepackage{booktabs}
 \usepackage{biblatex}
 \addbibresource{references.bib} % Create this file for your references
 
@@ -239,7 +241,7 @@ The boxplot shows that the median anxiety score lies in the \emph{Moderate} to \
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{figures/boxplot_dassanxiety_by_severity_bands.png}
+    \includegraphics[width=0.7\textwidth]{figures/boxplot_dassanxiety_with_severity_bands.png}
     \caption{Distribution of DASS-Anxiety scores with clinical severity thresholds.}
     \label{fig:anxiety_boxplot}
 \end{figure}
