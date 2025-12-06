@@ -43,6 +43,8 @@ htmlcov/
 *.glo
 *.gls
 *.ist
+*.pdf
+!docs/Mental_Health_Anxiety_Report.pdf
 
 # OS-specific crap
 .DS_Store
