@@ -123,15 +123,30 @@ These commands will:
 - Report any failures or regressions in the pipeline
 - (With `--cov`): show line-by-line coverage information for the `src/` package
 
+## Reproducing the LaTex Report
+
+From the `docs/`folder:
+
+```bash
+cd docs
+pdflatex Mental_Health_Anxiety_Report.tex
+biber Mental_Health_Anxiety_Report
+pdflatex Mental_Health_Anxiety_Report.tex
+pdflatex Mental_Health_Anxiety_Report.tex
+```
+
 ## Repository Structure
 
 ```
-MENTAL-HEALTH_ANXIETY/
+mental-health-anxiety-dass21/
 ├── data/
 │   └── mental_health_survey.csv        # Raw input data (DASS-21)
 │
-├── docs/
-│   └── Mental_Health_Anxiety.pdf      # Final technical report (LaTeX compiled)
+├── docs/                     
+│   └── figures/                      
+│   └── tables/
+│   ├── Mental_Health_Anxiety_Report.tex   # LaTeX source for the report
+│   └── Mental_Health_Anxiety_Report.pdf   # Final technical report (compiled locally)
 │
 ├── results/
 │   ├── figures/                       # All generated figures (PNG)
