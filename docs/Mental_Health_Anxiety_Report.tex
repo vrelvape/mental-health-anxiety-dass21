@@ -612,5 +612,53 @@ python -m src.main
 \end{verbatim}
 from the project root, after installing the required dependencies.
 
+
+
+\section{Use of AI-based Helper Tools}
+\label{app:ai_tools}
+
+In line with the Advanced Programming 2025 project guidelines, this appendix briefly reports how AI-based helper tools were used during the development of this project.
+
+\subsection*{AI tools used}
+
+\begin{itemize}
+    \item \textbf{ChatGPT} (OpenAI) -- used as a conversational assistant for programming support, LaTeX help, and feedback on the structure and wording of the report.
+\end{itemize}
+
+No other AI coding assistants (such as GitHub Copilot) were used.
+
+\subsection*{Scope of assistance}
+
+AI support was used in a limited and targeted way:
+
+\begin{itemize}
+    \item \textbf{Debugging and code refinement}: 
+    Getting suggestions to understand and fix Python errors and warnings, simplify functions, and make the data-processing pipeline more robust (e.g., handling missing values, cleaning categorical variables, and structuring the code into reusable components).
+
+    \item \textbf{Library usage and implementation details}: 
+    Clarifying how to use specific features of \texttt{pandas}, \texttt{scikit-learn}, and plotting libraries (for example, configuring a \texttt{RandomForestRegressor}, computing and visualising feature importances, or producing clear boxplots and heatmaps).
+
+    \item \textbf{LaTeX and typesetting}: 
+    Help with resolving LaTeX compilation issues (missing packages, misformatted tables, undefined references) and with converting Python outputs (tables and figures) into LaTeX environments using \texttt{booktabs}, captions, and labels.
+
+    \item \textbf{Writing and structure}: 
+    High-level suggestions for how to organise the Introduction, Methodology, Results, Discussion, and Conclusion sections, and for improving the clarity of some passages. All text was read, edited, and adapted by the author to reflect their own understanding and style.
+
+    \item \textbf{Conceptual checks}: 
+    Explanations and sanity checks for statistical and machine learning concepts (e.g., ANOVA, effect sizes, overfitting, train/test splits, interpretation of $R^2$ and feature importances) to make sure that the chosen methods and interpretations are reasonable.
+\end{itemize}
+
+\subsection*{Limitations of AI assistance and author responsibility}
+
+AI tools were used strictly as helpers, not as a replacement for the author's work:
+
+\begin{itemize}
+    \item All code in the repository was written, adapted, or refactored by the author and executed locally to verify that it runs and reproduces the results.
+    \item All data-processing choices, modelling decisions, and interpretations of the results are the responsibility of the author. AI suggestions were only adopted after being checked and, when necessary, modified.
+    \item The final structure of the report, the selection of figures and tables, and the main conclusions are based on the empirical results and on the author's judgement.
+\end{itemize}
+
+This appendix is intended to provide transparent documentation of how AI-based tools were used, in accordance with the course policy.
+
 \end{document}
 
