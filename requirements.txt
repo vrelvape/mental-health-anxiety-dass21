@@ -19,3 +19,6 @@ statsmodels
 # Testing
 pytest
 pytest-cov
+
+# LaTeX export (required by pandas Styler)
+jinja2>=3.0
