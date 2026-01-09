@@ -36,17 +36,31 @@ The goal is to understand how anxiety relates to demographics, personality trait
 
 ### Prerequisites
 
-- Python 3.10 or later
+- Python 3.11 (tested on macOS and Nuvolos/Linux)
+- Python 3.10+ should work, but 3.11 is recommended
+
 - Recommended: use a virtual environment (`venv` or `conda`)
+
 
 ### Installation
 
+#### Option A — Using conda (recommended on Nuvolos)
+
 ```bash
+conda create -n anxiety_ds python=3.11
+conda activate anxiety_ds
 git clone https://github.com/vrelvape/mental-health-anxiety-dass21.git
 cd mental-health-anxiety-dass21
 pip install -r requirements.txt
 ```
-The environment can be recreated using pip install -r requirements.txt inside a virtual environment.
+#### Option B — Using venv (generic)
+
+python -m venv venv
+source venv/bin/activate
+git clone https://github.com/vrelvape/mental-health-anxiety-dass21.git
+cd mental-health-anxiety-dass21
+pip install -r requirements.txt
+
 
 ## Input data files
 
@@ -123,6 +137,12 @@ These commands will:
 - (With `--cov`): show line-by-line coverage information for the `src/` package
 
 ## Reproducing the LaTex Report
+
+```md
+Note: The PDF report is provided pre-compiled for evaluation.
+Recompiling the LaTeX report is optional and not required to reproduce the results.
+All figures and tables used in the report are generated automatically by running `python main.py`.
+```
 
 From the `docs/`folder:
 
