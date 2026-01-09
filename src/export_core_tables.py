@@ -2,12 +2,12 @@
 Export core tables for the DASS-21 anxiety project.
 
 This module:
-- charge les données brutes,
-- lance le pipeline de nettoyage complet,
-- construit les tables principales (sévérité, géographie, ANOVA, ML),
-- exporte chaque table en CSV, LaTeX et PDF.
+- loads the raw data,
+- runs the full cleaning pipeline,
+- builds the main tables (severity, geography, ANOVA, ML),
+- exports each table to CSV, LaTeX, and PDF.
 
-Il est appelé depuis src.main via export_all_core_tables().
+It is called from src.main via export_all_core_tables().
 """
 
 from __future__ import annotations
@@ -25,7 +25,7 @@ from src.analysis.anova_personality import run_personality_anova_for_dassanxiety
 from src.analysis.ml_models import fit_random_forest_anxiety, compare_anxiety_models
 
 
-# Sous-dossiers pour les différents formats de tables
+# Subdirectories for the different table formats
 CSV_DIR = TABLES_DIR / "csv"
 LATEX_DIR = TABLES_DIR / "latex"
 PDF_DIR = TABLES_DIR / "pdf"
@@ -33,7 +33,7 @@ PDF_DIR = TABLES_DIR / "pdf"
 
 def init_table_dirs() -> None:
     """
-    Crée la structure de répertoires utilisée pour les exports de tables.
+    Create the directory structure used for table exports.
 
     - results/tables/
     - results/tables/csv
@@ -47,10 +47,10 @@ def init_table_dirs() -> None:
 
 def export_df_to_pdf(df: pd.DataFrame, path: Path, title: str | None = None) -> None:
     """
-    Rendre un DataFrame (petit / moyen) en PDF via matplotlib.
+    Render a (small / medium) DataFrame to PDF via matplotlib.
 
-    Le texte dans les cellules est "wrapé" pour éviter que les labels
-    trop longs ne débordent, afin de garder une table lisible.
+    Cell text is wrapped to prevent overly long labels
+    from overflowing, ensuring the table remains readable.
     """
     import textwrap
 
@@ -61,21 +61,21 @@ def export_df_to_pdf(df: pd.DataFrame, path: Path, title: str | None = None) -> 
 
     df_to_show = df.copy().applymap(lambda x: wrap_cell_text(x, max_width=18))
 
-    # Arrondir les colonnes numériques pour un affichage plus propre
+    # Round numeric columns for cleaner display
     for col in df_to_show.columns:
         if pd.api.types.is_numeric_dtype(df_to_show[col]):
             df_to_show[col] = df_to_show[col].round(3)
 
     n_rows, n_cols = df_to_show.shape
 
-    # Heuristique simple pour la taille de la figure
+    # Simple heuristic for figure size
     fig_width = max(7, 0.9 * n_cols)
     fig_height = max(4, 0.5 * n_rows)
 
     fig, ax = plt.subplots(figsize=(fig_width, fig_height))
     ax.axis("off")
 
-    # Wrap des en-têtes de colonnes
+    # Wrap column headers
     col_labels = [
         wrap_cell_text(c, max_width=18) if isinstance(c, str) else c
         for c in df_to_show.columns
@@ -93,7 +93,7 @@ def export_df_to_pdf(df: pd.DataFrame, path: Path, title: str | None = None) -> 
     table.scale(1.2, 1.4)
     table.auto_set_column_width(list(range(n_cols)))
 
-    # Style de la ligne d'en-tête et bordures
+    # Header row styling and borders
     for (row, col), cell in table.get_celld().items():
         cell.set_edgecolor("black")
         if row == 0:
@@ -115,7 +115,7 @@ def export_table_all_formats(
     title_for_pdf: str | None = None,
 ) -> None:
     """
-    Exporter un DataFrame en CSV, LaTeX et PDF.
+    Export a DataFrame to CSV, LaTeX, and PDF.
 
     - CSV : results/tables/csv/{base_name}.csv
     - LaTeX : results/tables/latex/{base_name}.tex
@@ -130,7 +130,7 @@ def export_table_all_formats(
     latex_str = df.to_latex(index=index)
     latex_path.write_text(latex_str, encoding="utf-8")
 
-    # Pour le PDF on reset l'index pour obtenir une table propre
+    # For PDF, reset the index to obtain a clean table
     df_for_pdf = df.reset_index() if index else df.reset_index(drop=True)
     export_df_to_pdf(df_for_pdf, pdf_path, title=title_for_pdf or base_name)
 
@@ -139,10 +139,10 @@ def export_table_all_formats(
 
 def export_large_table_csv_only(df: pd.DataFrame, base_name: str, index: bool = False) -> None:
     """
-    Exporter uniquement un CSV pour les très grandes tables
+    Export only a CSV for very large tables
     (clean_df, analysis_df, etc.).
 
-    Ces tables sont utiles pour inspection, mais peu adaptées pour LaTeX/PDF.
+    These tables are useful for inspection but not well suited for LaTeX/PDF.
     """
     csv_path = CSV_DIR / f"{base_name}.csv"
     df.to_csv(csv_path, index=index)
@@ -151,9 +151,9 @@ def export_large_table_csv_only(df: pd.DataFrame, base_name: str, index: bool = 
 
 def add_age_group_column(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Ajouter une colonne catégorielle age_group dérivée de age_clean.
+    Add a categorical age_group column derived from age_clean.
 
-    Bins :
+    Bins:
         13–17, 18–24, 25–34, 35–49, 50+.
     """
     bins = [12, 17, 24, 34, 49, 100]
@@ -179,11 +179,11 @@ def add_age_group_column(df: pd.DataFrame) -> pd.DataFrame:
 
 def build_anxiety_severity_tables(analysis_std: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
-    Construire toutes les tables liées aux catégories de sévérité d'anxiété :
+    Build all tables related to anxiety severity categories:
 
-    - distribution globale des catégories de sévérité,
-    - distribution de sévérité par genre,
-    - distribution de sévérité par tranche d'âge.
+    - overall distribution of severity categories,
+    - severity distribution by gender,
+    - severity distribution by age group.
     """
     df = add_age_group_column(analysis_std).copy()
 
@@ -200,14 +200,14 @@ def build_anxiety_severity_tables(analysis_std: pd.DataFrame) -> dict[str, pd.Da
 
     tables: dict[str, pd.DataFrame] = {}
 
-    # Résumé global
+    # Global summary
     severity_counts = df["anxiety_severity"].value_counts().sort_index()
     severity_percent = (severity_counts / len(df) * 100).round(2)
     tables["anxiety_severity_summary"] = pd.DataFrame(
         {"Count": severity_counts, "Percentage (%)": severity_percent}
     )
 
-    # Par genre
+    # By gender
     if "gender_clean" in df.columns:
         by_gender_counts = (
             df.groupby(["gender_clean", "anxiety_severity"], observed=False)
@@ -220,7 +220,7 @@ def build_anxiety_severity_tables(analysis_std: pd.DataFrame) -> dict[str, pd.Da
         tables["anxiety_severity_by_gender_counts"] = by_gender_counts
         tables["anxiety_severity_by_gender_percent"] = by_gender_percent
 
-    # Par tranche d'âge
+    # By age group
     if "age_group" in df.columns:
         by_age_counts = (
             df.groupby(["age_group", "anxiety_severity"], observed=False)
@@ -238,15 +238,15 @@ def build_anxiety_severity_tables(analysis_std: pd.DataFrame) -> dict[str, pd.Da
 
 def build_geo_tables(analysis_std: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
-    Construire les tables géographiques :
+    Build geographic tables:
 
-    - moyenne d'anxiété par continent,
-    - top 10 pays par anxiété moyenne,
-    - top 10 pays par taille d'échantillon.
+    - mean anxiety by continent,
+    - top 10 countries by mean anxiety,
+    - top 10 countries by sample size.
     """
     tables: dict[str, pd.DataFrame] = {}
 
-    # Moyenne par continent
+    # Mean by continent
     if "continent" in analysis_std.columns:
         mean_by_continent = (
             analysis_std.groupby("continent", observed=True)["dassanxiety"]
@@ -257,7 +257,7 @@ def build_geo_tables(analysis_std: pd.DataFrame) -> dict[str, pd.DataFrame]:
         )
         tables["mean_anxiety_by_continent"] = mean_by_continent
 
-    # Tables par pays (top 10)
+    # Country-level tables (top 10)
     if "country_name" in analysis_std.columns:
         mean_by_country = (
             analysis_std.groupby("country_name", observed=False)["dassanxiety"]
@@ -277,12 +277,12 @@ def build_geo_tables(analysis_std: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
 def build_anova_tables(analysis_df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     """
-    Construire les tables de résumés ANOVA pour :
+    Build ANOVA summary tables for:
 
-    - prédicteurs démographiques (genre, orientation, âge, etc.),
-    - traits de personnalité TIPI.
+    - demographic predictors (gender, orientation, age, etc.),
+    - TIPI personality traits.
 
-    Chaque ligne contient :
+    Each row contains:
     - F statistic,
     - p-value.
     """
@@ -307,7 +307,7 @@ def build_anova_tables(analysis_df: pd.DataFrame) -> dict[str, pd.DataFrame]:
         "Openness",
     ]
 
-    # ANOVA démographiques
+    # Demographic ANOVA
     demo_results = run_demographic_anova_for_dassanxiety(analysis_df, demographic_factors)
     demo_rows = [
         {"factor": factor, "F": res["f_stat"], "p_value": res["p_value"]}
@@ -316,7 +316,7 @@ def build_anova_tables(analysis_df: pd.DataFrame) -> dict[str, pd.DataFrame]:
     if demo_rows:
         tables["anova_demographics_summary"] = pd.DataFrame(demo_rows).set_index("factor")
 
-    # ANOVA personnalité
+    # Personality ANOVA
     perso_results = run_personality_anova_for_dassanxiety(
         analysis_df,
         traits=tipi_traits,
@@ -334,24 +334,24 @@ def build_anova_tables(analysis_df: pd.DataFrame) -> dict[str, pd.DataFrame]:
 
 def export_all_core_tables() -> None:
     """
-    Fonction haut niveau qui orchestre tous les exports de tables.
+    High-level function that orchestrates all table exports.
 
-    Étapes :
-    1. Charger les données brutes et lancer le pipeline de nettoyage.
-    2. Exporter les grandes tables (clean_df, analysis_df, ...) en CSV uniquement.
-    3. Construire et exporter :
-       - tables de sévérité,
-       - tables géographiques,
-       - résumés ANOVA,
-       - importances du Random Forest,
-       - comparaison des trois modèles de régression.
+    Steps:
+    1. Load raw data and run the cleaning pipeline.
+    2. Export large tables (clean_df, analysis_df, ...) as CSV only.
+    3. Build and export:
+       - severity tables,
+       - geographic tables,
+       - ANOVA summaries,
+       - Random Forest importances,
+       - comparison of the three regression models.
     """
     init_table_dirs()
 
     raw_df = load_data()
     cleaned = full_cleaning_pipeline(raw_df)
 
-    # 1) Tables de nettoyage → CSV uniquement
+    # 1) Cleaning tables → CSV only
     export_large_table_csv_only(cleaned.clean_df, "clean_df", index=False)
     export_large_table_csv_only(cleaned.clean_valid_df, "clean_valid_df", index=False)
     export_large_table_csv_only(cleaned.analysis_df, "analysis_df", index=False)
@@ -364,22 +364,22 @@ def export_all_core_tables() -> None:
     analysis_std = cleaned.analysis_standardized_df
     analysis_df = cleaned.analysis_df
 
-    # 2) Tables de sévérité → 3 formats
+    # 2) Severity tables → 3 formats
     severity_tables = build_anxiety_severity_tables(analysis_std)
     for name, df in severity_tables.items():
         export_table_all_formats(df, name, index=True)
 
-    # 3) Tables géographiques → 3 formats
+    # 3) Geographic tables → 3 formats
     geo_tables = build_geo_tables(analysis_std)
     for name, df in geo_tables.items():
         export_table_all_formats(df, name, index=False)
 
-    # 4) Tables ANOVA → 3 formats
+    # 4) ANOVA tables → 3 formats
     anova_tables = build_anova_tables(analysis_df)
     for name, df in anova_tables.items():
         export_table_all_formats(df, name, index=True)
 
-    # 5) Importances du Random Forest → 3 formats
+    # 5) Random Forest importances → 3 formats
     rf_result = fit_random_forest_anxiety(analysis_std)
     rf_importances = rf_result.feature_importances
     export_table_all_formats(
@@ -389,7 +389,7 @@ def export_all_core_tables() -> None:
         title_for_pdf="Random Forest feature importances for DASS anxiety",
     )
 
-    # 6) Comparaison des trois modèles → 3 formats
+    # 6) Comparison of the three models → 3 formats
     model_comp_df = compare_anxiety_models(analysis_std)
     export_table_all_formats(
         model_comp_df,
@@ -402,7 +402,7 @@ def export_all_core_tables() -> None:
 
 
 def main() -> None:
-    """Point d'entrée en ligne de commande pour exporter toutes les tables."""
+    """Command-line entry point to export all tables."""
     export_all_core_tables()
 
 

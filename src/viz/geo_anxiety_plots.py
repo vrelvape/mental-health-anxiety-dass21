@@ -79,7 +79,7 @@ def plot_world_anxiety_map(
         "ISO_A3",
         "iso3",
         "ISO3",
-        "ISO3166-1-Alpha-3",  # <- celui de ton fichier
+        "ISO3166-1-Alpha-3",  
         "id",
     ]
     code_col = None
