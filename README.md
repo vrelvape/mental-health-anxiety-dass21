@@ -61,6 +61,9 @@ git clone https://github.com/vrelvape/mental-health-anxiety-dass21.git
 cd mental-health-anxiety-dass21
 pip install -r requirements.txt
 ```
+Note: On some systems (e.g. macOS), the Python executable is called `python3`
+instead of `python`. If `python` is not found, replace it with `python3`
+(and `pip` with `pip3` if needed).
 
 ## Input data files
 
