@@ -209,6 +209,15 @@ mental-health-anxiety-dass21/
 ```
 
 ## Outputs
+### Note on generated outputs
+
+The `results/` directory contains automatically generated figures and tables
+produced by running `python main.py`.  
+These files are **not versioned** in the repository, as they are fully
+reproducible from the raw data and the provided pipeline.
+
+For convenience and evaluation purposes, selected final figures and the
+compiled PDF report are included under the `docs/` directory.
 
 ### Statistical Tables
 
