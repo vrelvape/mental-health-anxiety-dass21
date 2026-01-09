@@ -54,13 +54,13 @@ cd mental-health-anxiety-dass21
 pip install -r requirements.txt
 ```
 #### Option B — Using venv (generic)
-
+```bash
 python -m venv venv
 source venv/bin/activate
 git clone https://github.com/vrelvape/mental-health-anxiety-dass21.git
 cd mental-health-anxiety-dass21
 pip install -r requirements.txt
-
+```
 
 ## Input data files
 
